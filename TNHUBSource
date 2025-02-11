@@ -58,7 +58,7 @@ local Tab = Window:CreateTab("Main", "laptop")
 local Section = Tab:CreateSection("Exploits")
 
 local Toggle = Tab:CreateToggle({
-   Name = "Auto Kill Farm",
+   Name = "Kill Auto Farm (Executor Unsupported)",
    CurrentValue = false,
    Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
    Callback = function(Value)
@@ -66,3 +66,68 @@ local Toggle = Tab:CreateToggle({
    -- The variable (Value) is a boolean on whether the toggle is true or false
    end,
 })
+
+local Button = Tab:CreateButton({
+   Name = "Gojo Moveset",
+   Callback = function()
+   -- The function that takes place when the button is pressed
+   end,
+})
+
+local Slider = Tab:CreateSlider({
+   Name = "Walkspeed",
+   Range = {0, 250},
+   Increment = 10,
+   Suffix = "Walkspeed",
+   CurrentValue = 16,
+   Flag = "Slider1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+   -- The function that takes place when the slider changes
+   -- The variable (Value) is a number which correlates to the value the slider is currently at
+   end,
+})
+
+wait(2)
+Rayfield:Destroy()
+local sound = Instance.new("Sound")
+sound.SoundId = "rbxassetid://5257382967"
+sound.Volume = 2
+sound.Looped = false
+sound.Parent = game.SoundService
+sound:Play()
+
+
+local cc = Instance.new("ColorCorrectionEffect")
+cc.TintColor = Color3.new(1, 0, 0) -- Czerwony
+cc.Saturation = 0
+cc.Contrast = 0
+cc.Parent = game.Lighting
+
+task.spawn(function()
+    while task.wait(0.1) do
+        cc.Saturation = cc.Saturation + 0.05
+        cc.Contrast = cc.Contrast + 0.1
+        if cc.Saturation >= 1 and cc.Contrast >= 5 then
+            break
+        end
+    end
+end)
+wait(3)
+cc:Destroy()
+wait(10)
+local sound = Instance.new("Sound")
+sound.SoundId = "rbxassetid://18909603132"
+sound.Volume = 5
+sound.Looped = false
+sound.Parent = game.SoundService
+sound:Play()
+
+wait(0.3)
+local cc = Instance.new("ColorCorrectionEffect")
+cc.TintColor = Color3.new(1, 0, 0) -- Czerwony
+cc.Saturation = 5
+cc.Contrast = 5
+cc.Parent = game.Lighting
+wait(0.5)
+cc:Destroy()
+
