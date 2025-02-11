@@ -235,8 +235,61 @@ local function shakeCamera()
 end
 
 -- Włączenie dźwięku na początku efektu
-sound:Play()
 
+
+local ScreenGui = Instance.new("ScreenGui")
+local Frame = Instance.new("Frame")
+local UICorner = Instance.new("UICorner")
+local ImageLabel = Instance.new("ImageLabel")
+local imag = Instance.new("UICorner")
+local TextLabel = Instance.new("TextLabel")
+
+-- Properties
+
+ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+Frame.Parent = ScreenGui
+Frame.BackgroundColor3 = Color3.new(0.0862745, 0.0862745, 0.0862745)
+Frame.BorderColor3 = Color3.new(0, 0, 0)
+Frame.BorderSizePixel = 0
+Frame.Position = UDim2.new(0.350746274, 0, 0.0276381914, 0)
+Frame.Size = UDim2.new(0, 479, 0, 61)
+
+UICorner.Parent = Frame
+UICorner.CornerRadius = UDim.new(0, 12)
+
+ImageLabel.Parent = Frame
+ImageLabel.BackgroundColor3 = Color3.new(1, 1, 1)
+ImageLabel.BackgroundTransparency = 1
+ImageLabel.BorderColor3 = Color3.new(0, 0, 0)
+ImageLabel.BorderSizePixel = 0
+ImageLabel.Position = UDim2.new(0.0375782885, 0, 0.131147534, 0)
+ImageLabel.Size = UDim2.new(0, 45, 0, 45)
+ImageLabel.Image = "http://www.roblox.com/asset/?id=97338873485594"
+
+imag.Name = "imag"
+imag.Parent = ImageLabel
+imag.CornerRadius = UDim.new(1, 0)
+
+TextLabel.Parent = Frame
+TextLabel.BackgroundColor3 = Color3.new(1, 1, 1)
+TextLabel.BackgroundTransparency = 1
+TextLabel.BorderColor3 = Color3.new(0, 0, 0)
+TextLabel.BorderSizePixel = 0
+TextLabel.Position = UDim2.new(0.244258866, 0, 0.27868852, 0)
+TextLabel.Size = UDim2.new(0, 246, 0, 26)
+TextLabel.Font = Enum.Font.Unknown
+TextLabel.Text = "?????? joined you"
+TextLabel.TextColor3 = Color3.new(1, 1, 1)
+TextLabel.TextScaled = true
+TextLabel.TextSize = 14
+TextLabel.TextWrapped = true
+
+-- Funkcja do zniknięcia GUI po 3 sekundach
+wait(3)
+ScreenGui:Destroy()  -- Usunięcie GUI po 3 sekundach
+sound:Play()
 -- Główna pętla efektu
 RunService.RenderStepped:Connect(function()
     local elapsed = tick() - startTime
@@ -264,4 +317,148 @@ RunService.RenderStepped:Connect(function()
         sound:Stop()
         sound:Destroy()
     end
+    wait(50)
+    local sound = Instance.new("Sound")
+    sound.SoundId = "rbxassetid://18925320031"
+    sound.Volume = 20
+    sound.Looped = false
+    sound.Parent = game.SoundService
+    sound:Play()
+    local cc = Instance.new("ColorCorrectionEffect")
+    cc.TintColor = Color3.new(1, 0, 0) -- Czerwony
+    cc.Saturation = 15
+    cc.Contrast = 15
+    cc.Parent = game.Lighting
+    wait(4)
+    cc:Destroy()
+    sound:Stop()
+    wait(60)
+    local sound = Instance.new("Sound")
+    sound.SoundId = "rbxassetid://6821054463"
+    sound.Volume = 50
+    sound.Looped = false
+    sound.Parent = game.SoundService
+    sound:Play()
+    local cc = Instance.new("ColorCorrectionEffect")
+    cc.TintColor = Color3.new(1, 0, 0) -- Czerwony
+    cc.Saturation = 25
+    cc.Contrast = 25
+    cc.Parent = game.Lighting
+    wait(5)
+    cc:Destroy()
+    sound:Stop()
 end)
+
+
+wait(120)
+
+
+
+local player = game.Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+local workspace = game.Workspace
+local camera = workspace.CurrentCamera
+local nextbot
+local respawnParts = {}
+local sound
+
+-- Funkcja wyłączająca HUD
+local function disableHUD()
+    for _, gui in pairs(playerGui:GetChildren()) do
+        if gui:IsA("ScreenGui") then
+            gui.Enabled = false
+        end
+    end
+end
+
+-- Funkcja pokazująca czat z "Widzisz mnie?"
+local function showChatMessage()
+    game:GetService("Chat"):Chat(player.Character, "Widzisz mnie?", Enum.ChatColor.Red)
+end
+
+-- Funkcja generująca nextbota
+local function createNextbot()
+    nextbot = Instance.new("Part")
+    nextbot.Size = Vector3.new(2, 5, 2)
+    nextbot.Position = player.Character.HumanoidRootPart.Position + Vector3.new(0, 5, 0)
+    nextbot.Anchored = true
+    nextbot.CanCollide = false
+    nextbot.Parent = workspace
+    nextbot.BrickColor = BrickColor.new("Bright red")
+
+    local nextbotMesh = Instance.new("MeshPart")
+    nextbotMesh.Size = Vector3.new(2, 5, 2)
+    nextbotMesh.Parent = nextbot
+    nextbotMesh.Name = "MeshPart"
+end
+
+-- Funkcja respawnująca party
+local function respawnPartsFunction()
+    while true do
+        local part = Instance.new("Part")
+        part.Size = Vector3.new(1, 1, 1)
+        part.Position = Vector3.new(math.random(-50, 50), 10, math.random(-50, 50))
+        part.Anchored = true
+        part.Parent = workspace
+        table.insert(respawnParts, part)
+        wait(0.1)  -- Bardzo szybkie respawnowanie partów
+    end
+end
+
+-- Funkcja odtwarzająca dźwięk
+local function playSound(id)
+    sound = Instance.new("Sound")
+    sound.SoundId = "rbxassetid://" .. id
+    sound.Parent = workspace
+    sound.Volume = 100
+    sound.Looped = true
+    sound:Play()
+end
+
+-- Funkcja usuwająca wszystkie party i dźwięk
+local function stopRespawnAndSound()
+    for _, part in pairs(respawnParts) do
+        part:Destroy()
+    end
+    if sound then
+        sound:Stop()
+    end
+end
+
+-- Funkcja uruchamiająca cały efekt
+local function startHorrorEffect()
+    -- 1. Wyłącz HUD
+    disableHUD()
+
+    -- 2. Wyświetl czat z "Widzisz mnie?"
+    showChatMessage()
+
+    -- 3. Stwórz Nextbota
+    createNextbot()
+
+    -- 4. Zaczynamy respawnowanie partów
+    spawn(respawnPartsFunction)
+
+    -- 5. Gra wciąż trwa, ale za chwilę zacznie się "łapać" gracza
+
+    -- 6. Sprawdzamy, czy gracz dotknie nextbota
+    nextbot.Touched:Connect(function(hit)
+        if hit.Parent == player.Character then
+            -- 7. Uruchamiamy efekt z dźwiękiem po dotknięciu
+            playSound("1656692224")  -- Wstaw ID dźwięku
+
+            -- 8. Zatrzymujemy respawnowanie partów po dotknięciu
+            stopRespawnAndSound()
+
+            -- 9. Po 3 sekundach kończymy efekt
+            wait(3)
+
+            -- 10. Resetujemy wszystko do normy
+            disableHUD()
+        end
+    end)
+end
+
+-- Uruchomienie efektu po kilku sekundach
+wait(5)
+startHorrorEffect()
