@@ -207,7 +207,7 @@ dof.Parent = Lighting
 
 local sound = Instance.new("Sound")
 sound.SoundId = "rbxassetid://172313730" -- wpisz ID dźwięku
-sound.Volume = 2
+sound.Volume = 5
 sound.Looped = false
 sound.Parent = game.SoundService
 
@@ -221,7 +221,6 @@ local shakeMagnitude = 1.5 -- siła trzęsienia kamery
 
 local startTime = tick()
 
-sound:Play()
 -- Efekt shakowania kamery
 local function shakeCamera()
     local elapsed = tick() - startTime
@@ -234,6 +233,9 @@ local function shakeCamera()
         Camera.CFrame = Camera.CFrame * CFrame.new(offset)
     end
 end
+
+-- Włączenie dźwięku na początku efektu
+sound:Play()
 
 -- Główna pętla efektu
 RunService.RenderStepped:Connect(function()
@@ -257,8 +259,9 @@ RunService.RenderStepped:Connect(function()
         cc:Destroy()
         dof:Destroy()
         clouds:Destroy()
+
+        -- Wyłączenie dźwięku
+        sound:Stop()
         sound:Destroy()
     end
 end)
-
-sound:Stop()
